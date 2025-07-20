@@ -3,45 +3,28 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreChapterRequest;
 use App\Models\Book;
 use App\Models\Chapter;
-use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
-use Illuminate\Http\RedirectResponse;
 
 class ChapterController extends Controller
 {
-    // ИЗМЕНЁННЫЙ МЕТОД
     public function index(Book $book): View
     {
-        // Загружаем главы верхнего уровня для отображения
         $chapters = $book->chapters()->whereNull('parent_id')->with('children')->orderBy('order_column')->get();
-
-        // Получаем дерево для выпадающего списка в форме
         $chapterTree = $book->getChapterTree();
-
         return view('admin.chapters.index', compact('book', 'chapters', 'chapterTree'));
     }
 
-    // МЕТОД CREATE УДАЛЁН
-
-    public function store(Request $request, Book $book): RedirectResponse
+    public function store(StoreChapterRequest $request, Book $book): RedirectResponse
     {
-        $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'content_html' => 'required|string',
-            'order_column' => 'nullable|integer',
-            'parent_id' => 'nullable|exists:chapters,id', // Добавили валидацию для parent_id
-        ]);
+        $validated = $request->validated();
+        $validated['slug'] = Str::slug($validated['title']);
 
-        $book->chapters()->create([
-            'title' => $validated['title'],
-            'slug' => Str::slug($validated['title']),
-            'content_html' => $validated['content_html'],
-            'order_column' => $validated['order_column'] ?? 0,
-            'parent_id' => $validated['parent_id'],
-        ]);
+        $book->chapters()->create($validated);
 
         return redirect()->route('admin.books.chapters.index', $book)->with('success', 'Глава успешно добавлена.');
     }
@@ -52,22 +35,12 @@ class ChapterController extends Controller
         return view('admin.chapters.edit', compact('chapter', 'chapterTree'));
     }
 
-    public function update(Request $request, Chapter $chapter): RedirectResponse
+    public function update(StoreChapterRequest $request, Chapter $chapter): RedirectResponse
     {
-        $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'content_html' => 'required|string',
-            'order_column' => 'nullable|integer',
-            'parent_id' => 'nullable|exists:chapters,id', // Добавили валидацию для parent_id
-        ]);
+        $validated = $request->validated();
+        $validated['slug'] = Str::slug($validated['title']);
 
-        $chapter->update([
-            'title' => $validated['title'],
-            'slug' => Str::slug($validated['title']),
-            'content_html' => $validated['content_html'],
-            'order_column' => $validated['order_column'] ?? 0,
-            'parent_id' => $validated['parent_id'],
-        ]);
+        $chapter->update($validated);
 
         return redirect()->route('admin.books.chapters.index', $chapter->book)->with('success', 'Глава успешно обновлена.');
     }

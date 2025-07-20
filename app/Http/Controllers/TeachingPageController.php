@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
-use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class TeachingPageController extends Controller
@@ -16,7 +15,8 @@ class TeachingPageController extends Controller
         $categories = Category::query()
             ->whereIn('id', $categoryIds)
             ->with(['articles' => function ($query) {
-                $query->orderBy('order_column'); // Сортируем статьи внутри каждой категории
+                // ДОБАВЛЯЕМ УСЛОВИЕ: ВЫБИРАТЬ ТОЛЬКО СТАТЬИ ВЕРХНЕГО УРОВНЯ
+                $query->whereNull('parent_id')->orderBy('order_column');
             }])
             ->get();
 

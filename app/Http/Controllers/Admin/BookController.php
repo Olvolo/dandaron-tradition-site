@@ -3,12 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreBookRequest; // <-- Используем Form Request
 use App\Models\Author;
 use App\Models\Book;
-use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
-use Illuminate\Http\RedirectResponse;
 
 class BookController extends Controller
 {
@@ -24,23 +24,12 @@ class BookController extends Controller
         return view('admin.books.create', compact('authors'));
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(StoreBookRequest $request): RedirectResponse
     {
-        $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'order_column' => 'nullable|integer',
-            'authors' => 'required|array',
-            'authors.*' => 'exists:authors,id',
-        ]);
+        $validated = $request->validated(); // Получаем проверенные данные
+        $validated['slug'] = Str::slug($validated['title']);
 
-        $book = Book::query()->create([
-            'title' => $validated['title'],
-            'slug' => Str::slug($validated['title']),
-            'description' => $validated['description'],
-            'order_column' => $validated['order_column'] ?? 0,
-        ]);
-
+        $book = Book::query()->create($validated);
         $book->authors()->sync($validated['authors']);
 
         return redirect()->route('admin.books.index')->with('success', 'Книга успешно создана.');
@@ -52,23 +41,12 @@ class BookController extends Controller
         return view('admin.books.edit', compact('book', 'authors'));
     }
 
-    public function update(Request $request, Book $book): RedirectResponse
+    public function update(StoreBookRequest $request, Book $book): RedirectResponse
     {
-        $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'order_column' => 'nullable|integer',
-            'authors' => 'required|array',
-            'authors.*' => 'exists:authors,id',
-        ]);
+        $validated = $request->validated(); // Получаем проверенные данные
+        $validated['slug'] = Str::slug($validated['title']);
 
-        $book->update([
-            'title' => $validated['title'],
-            'slug' => Str::slug($validated['title']),
-            'description' => $validated['description'],
-            'order_column' => $validated['order_column'] ?? 0,
-        ]);
-
+        $book->update($validated);
         $book->authors()->sync($validated['authors']);
 
         return redirect()->route('admin.books.index')->with('success', 'Книга успешно обновлена.');
@@ -76,7 +54,7 @@ class BookController extends Controller
 
     public function destroy(Book $book): RedirectResponse
     {
-        $book->delete(); // Каскадное удаление глав сработает автоматически благодаря событию в модели
+        $book->delete();
         return redirect()->route('admin.books.index')->with('success', 'Книга успешно удалена.');
     }
 }

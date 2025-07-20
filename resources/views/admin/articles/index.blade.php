@@ -31,7 +31,7 @@
                                 <td class="px-6 py-4 whitespace-nowrap">{{ $article->title }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap">{{ $article->category->name }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                    <a href="{{ route('admin.articles.edit', $article) }}" class="text-indigo-600 hover:text-indigo-900">Редактировать</a>
+                                    <a href="{{ route('admin.articles.sections.index', $article) }}" class="text-green-600 hover:text-green-900">Разделы</a>                                    <a href="{{ route('admin.articles.edit', $article) }}" class="text-indigo-600 hover:text-indigo-900">Редактировать</a>
                                     <form action="{{ route('admin.articles.destroy', $article) }}" method="POST" class="inline-block ml-4" onsubmit="return confirm('Вы уверены?');">
                                         @csrf
                                         @method('DELETE')

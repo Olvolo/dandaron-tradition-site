@@ -12,33 +12,21 @@
 
     <script src="https://cdn.tiny.cloud/1/s9ruegseg1w39nvgw7am8g8ys8a3ryn4ozp2yuvsrfwbhx22/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            // noinspection JSUnresolvedReference
-            tinymce.init({
-                selector: 'textarea.tinymce-editor',
-                height: 600,
-                plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
-                toolbar: 'undo redo | blocks | bold italic underline | link image media table | align | bullist numlist outdent indent | removeformat | codesample charmap',
-            });
-        });
-    </script>
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @stack('styles')
 </head>
 <body x-data="{ atTop: true }" @scroll.window="atTop = (window.scrollY < 300)" class="font-sans antialiased
     bg-brand-blue-light text-brand-blue-dark
-    dark:bg-brand-blue dark:text-brand-cream-light"
->
+    dark:bg-brand-blue dark:text-brand-cream-light">
 <div class="min-h-screen flex flex-col">
-
     {{-- HEADER --}}
     <header class="bg-white dark:bg-brand-blue-light/10 shadow">
         @include('layouts.navigation')
     </header>
 
     {{-- MAIN --}}
-    <main class="flex-grow flex">
+    <main class="flex-grow flex justify-center">
         {{ $slot }}
     </main>
 

@@ -13,6 +13,7 @@ use App\Http\Controllers\TeachingPageController;
 use App\Http\Controllers\ArticlePageController;
 use App\Http\Controllers\BookPageController;
 use App\Http\Controllers\SearchController;
+use App\Http\Controllers\Admin\ArticleSectionController;
 
 // --- ПУБЛИЧНАЯ ЧАСТЬ ---
 
@@ -47,6 +48,7 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->name('admin.')->group(fun
     Route::resource('articles', ArticleController::class);
     Route::resource('books', BookController::class);
     Route::resource('books.chapters', ChapterController::class)->shallow();
+    Route::resource('articles.sections', ArticleSectionController::class)->shallow();
 });
 
 // НОВЫЙ МАРШРУТ ДЛЯ СОВМЕСТИМОСТИ С BREEZE

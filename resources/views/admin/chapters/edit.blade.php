@@ -28,7 +28,9 @@
                             </div>
                             <div>
                                 <label for="content_html" class="block font-medium text-sm text-gray-700">Содержимое</label>
-                                <textarea name="content_html" id="content_html" class="tinymce-editor">{{ old('content_html', $chapter->content_html) }}</textarea>
+                                <textarea name="content_html" id="content_html" rows="100" class="block
+                                mt-1 w-full rounded-md shadow-sm border-gray-300">{{ old
+                                ('content_html', $chapter->content_html) }}</textarea>
                             </div>
                             <div>
                                 <label for="order_column" class="block font-medium text-sm text-gray-700">Порядковый номер</label>
