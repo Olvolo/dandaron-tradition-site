@@ -1,14 +1,18 @@
-<div class="{{ $isTopLevel ? '' : 'ml-6 border-l pl-6' }}">
-    @foreach($chapters as $chapter)
-        <div class="py-4">
-            <h2 id="section-{{ $chapter->id }}" class="text-2xl font-bold scroll-mt-20">{{ $chapter->title }}</h2>
-            <div class="prose dark:prose-invert max-w-none mt-4">
-                {!! $chapter->content_html !!}
-            </div>
+@foreach($chapters as $chapter)
+    <div class="py-6">
+        {{-- Заголовок раздела --}}
+        <h2 id="section-{{ $chapter->id }}" class="text-2xl font-bold scroll-mt-20 text-center">
+            {{ $chapter->title }}
+        </h2>
 
-            @if($chapter->children->isNotEmpty())
-                @include('pages.books._content_recursive', ['chapters' => $chapter->children, 'isTopLevel' => false])
-            @endif
+        {{-- Содержимое раздела --}}
+        <div class="prose prose-lg dark:prose-invert max-w-none mt-4">
+            {!! $chapter->content_html !!}
         </div>
-    @endforeach
-</div>
+
+        {{-- Если у этого раздела есть дочерние, выводим их следом --}}
+        @if($chapter->children->isNotEmpty())
+            @include('pages.books._content_recursive', ['chapters' => $chapter->children, 'isTopLevel' => false])
+        @endif
+    </div>
+@endforeach

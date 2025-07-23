@@ -14,6 +14,7 @@ use App\Http\Controllers\ArticlePageController;
 use App\Http\Controllers\BookPageController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\Admin\ArticleSectionController;
+use App\Http\Controllers\AuthorPageController;
 
 // --- ПУБЛИЧНАЯ ЧАСТЬ ---
 
@@ -23,8 +24,9 @@ Route::get('/', [WelcomeController::class, 'index'])->name('welcome');
 // Тематические страницы
 Route::view('/tradition', 'pages.tradition')->name('tradition');
 Route::view('/dandaron', 'pages.dandaron')->name('dandaron');
-Route::view('/faces', 'pages.faces')->name('faces');
-Route::get('/teaching', TeachingPageController::class)->name('teaching');
+Route::get('/faces', [AuthorPageController::class, 'index'])->name('faces');
+// Добавляем маршрут для страницы одного автора
+Route::get('/authors/{author:slug}', [AuthorPageController::class, 'show'])->name('authors.show');Route::get('/teaching', TeachingPageController::class)->name('teaching');
 Route::view('/history', 'pages.history')->name('history');
 Route::view('/additions', 'pages.additions')->name('additions');Route::view('/contacts', 'pages.contacts')->name('contacts');
 
@@ -56,6 +58,10 @@ Route::get('/dashboard', function () {
     // Просто перенаправляем на настоящий дашборд админа
     return redirect()->route('admin.dashboard');
 })->middleware(['auth'])->name('dashboard');
+
+Route::view('/sandbox/html-preview', 'sandbox.preview')
+    ->middleware(['auth', 'admin'])
+    ->name('sandbox.preview');
 
 // Стандартные маршруты аутентификации от Laravel Breeze
 require __DIR__.'/auth.php';

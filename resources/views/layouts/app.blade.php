@@ -4,19 +4,13 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-
     <title>{{ config('app.name', 'Архив Традиции Дандарона') }}</title>
-
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
-
-    <script src="https://cdn.tiny.cloud/1/s9ruegseg1w39nvgw7am8g8ys8a3ryn4ozp2yuvsrfwbhx22/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
-
-
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @stack('styles')
 </head>
-<body x-data="{ atTop: true }" @scroll.window="atTop = (window.scrollY < 300)" class="font-sans antialiased
+<body x-data="{ atTop: true, tocOpen: false }" @scroll.window="atTop = (window.scrollY < 300)" class="font-sans antialiased
     bg-brand-blue-light text-brand-blue-dark
     dark:bg-brand-blue dark:text-brand-cream-light">
 <div class="min-h-screen flex flex-col">
@@ -53,7 +47,8 @@
     </footer>
 
 </div>
-
+{{-- Место для плавающих кнопок со страниц --}}
+{{ $floatingActions ?? '' }}
 {{-- SCROLL-TO-TOP BUTTON --}}
 <button
     x-show="!atTop"
@@ -69,5 +64,6 @@
 >
     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path></svg>
 </button>
+
 </body>
 </html>

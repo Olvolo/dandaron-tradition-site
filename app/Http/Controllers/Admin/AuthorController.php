@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreAuthorRequest; // <-- Используем Form Request
 use App\Models\Author;
-use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
-use Illuminate\Http\RedirectResponse;
 
 class AuthorController extends Controller
 {
@@ -22,18 +22,13 @@ class AuthorController extends Controller
         return view('admin.authors.create');
     }
 
-    public function store(Request $request): RedirectResponse
+    // Используем StoreAuthorRequest
+    public function store(StoreAuthorRequest $request): RedirectResponse
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255|unique:authors',
-            'order_column' => 'nullable|integer',
-        ]);
+        $validated = $request->validated();
+        $validated['slug'] = Str::slug($validated['name']);
 
-        Author::query()->create([
-            'name' => $validated['name'],
-            'slug' => Str::slug($validated['name']),
-            'order_column' => $validated['order_column'] ?? 0,
-        ]);
+        Author::query()->create($validated);
 
         return redirect()->route('admin.authors.index')->with('success', 'Автор успешно создан.');
     }
@@ -43,18 +38,13 @@ class AuthorController extends Controller
         return view('admin.authors.edit', compact('author'));
     }
 
-    public function update(Request $request, Author $author): RedirectResponse
+    // Используем StoreAuthorRequest
+    public function update(StoreAuthorRequest $request, Author $author): RedirectResponse
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255|unique:authors,name,' . $author->getKey(),
-            'order_column' => 'nullable|integer',
-        ]);
+        $validated = $request->validated();
+        $validated['slug'] = Str::slug($validated['name']);
 
-        $author->update([
-            'name' => $validated['name'],
-            'slug' => Str::slug($validated['name']),
-            'order_column' => $validated['order_column'] ?? 0,
-        ]);
+        $author->update($validated);
 
         return redirect()->route('admin.authors.index')->with('success', 'Автор успешно обновлен.');
     }
