@@ -22,6 +22,15 @@
                         <h1 class="text-4xl font-bold text-center mb-4">{{ $book->title }}</h1>
                         <p class="text-center text-gray-700 dark:text-gray-400 mb-8">{{
                         $book->authors->pluck('name')->join(', ') }}</p>
+
+                        {{-- ===== НОВЫЙ БЛОК ДЛЯ АННОТАЦИИ ===== --}}
+                        @if($book->description)
+                            <div class="prose dark:prose-invert max-w-none mb-8">
+                                <p class="text-lg italic text-center">{{ $book->description }}</p>
+                            </div>
+                        @endif
+                        {{-- ======================================= --}}
+
                         @include('pages.books._content_recursive', ['chapters' => $chapters, 'isTopLevel' => true])
                     </main>
                 </div>
@@ -43,6 +52,7 @@
                 </div>
 
                 <div class="flex-grow p-6 overflow-y-auto">
+                    {{-- Этот блок уже был у вас, я его не трогал --}}
                     @if($article ?? false)
                         @include('pages.books._toc_recursive', ['chapters' => $article->children, 'isTopLevel' => true])
                     @else

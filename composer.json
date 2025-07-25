@@ -11,7 +11,8 @@
         "laravel/framework": "^12.0",
         "laravel/scout": "^10.16",
         "laravel/tinker": "^2.10.1",
-        "meilisearch/meilisearch-php": "^1.15"
+        "meilisearch/meilisearch-php": "^1.15",
+        "ext-mbstring": "*"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",

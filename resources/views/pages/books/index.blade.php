@@ -9,6 +9,10 @@
                             <a href="{{ route('books.show', $book) }}" class="block p-4 border rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700">
                                 <h2 class="text-xl font-semibold text-blue-600 dark:text-blue-400">{{ $book->title }}</h2>
                                 <p class="text-sm text-gray-500">{{ $book->authors->pluck('name')->join(', ') }}</p>
+                                @if($book->description)
+                                    <p class="mt-2 text-gray-600 dark:text-gray-400">{{
+                                    Str::limit($book->description, 2000) }}</p>
+                                @endif
                             </a>
                         @empty
                             <p>Книг пока нет.</p>

@@ -1,0 +1,42 @@
+1. cd C:\meilisearch
+   .\meilisearch.exe --master-key 'Uh0i04MA2E6iec3g_JVVF8jcpcmQfsbFPjWJ3s72WuE' --http-addr '127.0.0.1:9000'
+
+2. php artisan serve
+
+3. npm run dev
+
+This message is shown once a day. To disable it please create the
+/home/olvolo_17_$/.hushlogin file.
+
+4. В окошке Ubuntu:
+./meilisearch --master-key 'Uh0i04MA2E6iec3g_JVVF8jcpcmQfsbFPjWJ3s72WuE' --http-addr '0.0.0.0:8500'
+
+5. Очистка кэша:
+php artisan scout:import "App\Models\Article"
+php artisan scout:import "App\Models\Chapter"
+php artisan scout:import "App\Models\Book"
+php artisan scout:import "App\Models\Author"
+
+6. Команды, которые мы выполнили (composer dump-autoload и php artisan optimize:clear), полностью
+перестроили "карту" всех классов и функций вашего проекта.
+Ваш редактор кода (PhpStorm) увидел эти глобальные изменения,
+его старый кэш стал недействительным, и он "потерялся", подсветив всё как ошибки.
+
+   ## Как это исправить? (Инструкция для PhpStorm)
+   Откройте ваш проект в PhpStorm.
+
+   Перейдите в меню File (Файл) в левом верхнем углу.
+
+   Выберите пункт Invalidate Caches... (Сделать кэш недействительным...).
+
+   В открывшемся окне поставьте галочку "Clear file system cache and Local History" для полной очистки.
+
+   Нажмите синюю кнопку Invalidate and Restart (Сделать недействительным и перезапустить).
+
+   PhpStorm закроется и запустится заново. После запуска он начнёт полностью переиндексировать
+    ваш проект с нуля (вы увидите индикатор процесса внизу).
+
+    7. Сохранение на Гитхабе:
+    git add .
+    git commit -m "chore: Save state before major refactoring"
+    git push origin main
